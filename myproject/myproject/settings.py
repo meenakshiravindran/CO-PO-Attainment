@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'copoattainment'
+    'copoattainment',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -67,7 +69,12 @@ TEMPLATES = [
         },
     },
 ]
-
+ALLOWED_HOSTS = ["*"]
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000",  # For React Project
+    "http://127.0.0.1:8000",
+    "http://localhost:3000"# For Django Project
+]
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
 

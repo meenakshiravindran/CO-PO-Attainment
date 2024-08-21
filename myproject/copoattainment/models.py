@@ -13,11 +13,12 @@ class Student(models.Model):
 
 # 2. Programme DB
 class Programme(models.Model):
-    programme_id = models.CharField(max_length=10, primary_key=True)
+    programme_id = models.IntegerField(primary_key=True) 
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
+
 
 # 3. Courses
 class Course(models.Model):

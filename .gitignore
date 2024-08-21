@@ -1,0 +1,6 @@
+.dbeaver
+.git
+myproject/copoattainment/__pycache__
+myproject/myproject/__pycache__
+myproject/copoattainment/migrations
+.project
