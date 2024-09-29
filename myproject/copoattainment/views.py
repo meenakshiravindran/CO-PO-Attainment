@@ -209,13 +209,13 @@ def create_course(request):
             course_id = data.get('course_id')
             name = data.get('name')
             credits = data.get('credits')
-            programme_id = data.get('programme')
+            programme = data.get('programme')
 
-            if not course_id or not name or not credits or not programme_id:
+            if not course_id or not name or not credits or not programme:
                 return JsonResponse({'error': 'Missing fields'}, status=400)
 
             try:
-                programme = Programme.objects.get(programme_id=programme_id)
+                programme = Programme.objects.get(name=programme)
             except Programme.DoesNotExist:
                 return JsonResponse({'error': 'Programme not found'}, status=400)
 
@@ -291,4 +291,12 @@ def create_question_pattern(request):
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
         except IntegrityError as e:
             return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def get_programmes(request):
+    if request.method == 'GET':
+        programmes = Programme.objects.all()
+        programme_list = [{'id': programme.programme_id, 'name': programme.name} for programme in programmes]
+        return JsonResponse(programme_list, safe=False)
     return JsonResponse({'error': 'Invalid request method'}, status=405)

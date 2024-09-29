@@ -33,7 +33,7 @@ class Course(models.Model):
 # 4. Assessment Pattern
 class AssessmentPattern(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    assessment_type = models.CharField(max_length=50, help_text="e.g., Midterm, Final, Assignment")
+    assessment_type = models.CharField(max_length=50, help_text="e.g., Internal, Final, Assignment")
     total_marks = models.PositiveIntegerField(help_text="Total marks for this assessment")
 
     def __str__(self):
