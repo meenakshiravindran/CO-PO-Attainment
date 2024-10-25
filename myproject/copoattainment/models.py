@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 # 1. Student Information Table
 class Student(models.Model):
@@ -32,6 +33,7 @@ class Course(models.Model):
 
 # 4. Assessment Pattern
 class AssessmentPattern(models.Model):
+    assessment_id = models.CharField(max_length=100, blank=True, editable=False)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     assessment_type = models.CharField(max_length=50, help_text="e.g., Internal, Final, Assignment")
     total_marks = models.PositiveIntegerField(help_text="Total marks for this assessment")
@@ -39,6 +41,11 @@ class AssessmentPattern(models.Model):
     def __str__(self):
         return f'{self.assessment_type} - {self.course.name}'
 
+    # def save(self, *args, **kwargs):
+    #     if not self.assessment_id:  
+    #         self.assessment_id = f'{slugify(self.course.name)}-{slugify(self.assessment_type)}'
+    #     super(AssessmentPattern, self).save(*args, **kwargs)
+        
 # 5. Question Pattern for Each Assessment
 class QuestionPattern(models.Model):
     assessment_pattern = models.ForeignKey(AssessmentPattern, on_delete=models.CASCADE)
