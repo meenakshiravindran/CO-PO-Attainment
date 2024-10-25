@@ -165,11 +165,14 @@ def get_programmes_and_enrollment_years(request):
             
             # Fetch distinct enrollment years from the Student model
             enrollment_years = Student.objects.values_list('enrollment_year', flat=True).distinct()
-            
+            assessment_patterns = AssessmentPattern.objects.values('assessment_type','course')
+            courses = Course.objects.values('course_id','name')
             # Prepare the response data
             response_data = {
                 'programmes': list(programmes),
-                'enrollment_years': list(enrollment_years)
+                'enrollment_years': list(enrollment_years),
+                'courses': list(courses),
+                'assessment_patterns': list(assessment_patterns)
             }
             
             return JsonResponse(response_data, status=200)
@@ -235,15 +238,15 @@ def create_assessment_pattern(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            course_id = data.get('course')
+            course = data.get('course')
             assessment_type = data.get('assessment_type')
             total_marks = data.get('total_marks')
 
-            if not course_id or not assessment_type or not total_marks:
+            if not course or not assessment_type or not total_marks:
                 return JsonResponse({'error': 'Missing fields'}, status=400)
 
             try:
-                course = Course.objects.get(course_id=course_id)
+                course = Course.objects.get(name=course)
             except Course.DoesNotExist:
                 return JsonResponse({'error': 'Course not found'}, status=400)
 
@@ -300,3 +303,6 @@ def get_programmes(request):
         programme_list = [{'id': programme.programme_id, 'name': programme.name} for programme in programmes]
         return JsonResponse(programme_list, safe=False)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+def get_assessment_patterns(request):
+    patterns = AssessmentPattern.objects.all().values('id', 'name') 
+    return JsonResponse(list(patterns), safe=False)
